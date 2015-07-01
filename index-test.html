@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<meta charset=utf-8>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge; ">
+<title>Button Generator</title>
+<script type='text/javascript' src='/scripts/jquery-1.11.0.min.js'></script>
+<style>
+    body {padding:0; margin:0; font-size:10px; font-family:Arial, Helvetica, sans-serif; background:url('./stripe.png');}
+    #myCanvas {border:1px solid #ccc;}
+	 p {font-size:1.6em;}
+	 .wrap{
+		 
+		 text-align:center; 
+		 width:500px; 
+		 background:#F0F0F0; 
+		 margin:2em auto; 
+		 padding:10px 25px;
+		 border-radius:15px 15px;
+		 border:2px solid #888;
+		 box-shadow:2px 2px 3px #ccc;
+		 }
+    
+</style>
+</head>
+
+<body>
+<div class='wrap'>
+	<h1>Button Generator</h1>
+
+   <p>Type your text below and hit 'Create' to make a new button.</p>
+   
+   <div class='input-area' style='width:500px; margin:2em auto; text-align:center;'>
+       <input id='text-input' type='text' width='200' value='enter text here'>
+   </div>
+   
+   <div style='width:500px; height:50px;margin:1em auto;text-align: center'>
+       <canvas id='myCanvas' width="100" height="30"></canvas>
+   </div>
+   
+   <button style='margin:0 auto;' id='createButton'>Create</button>
+</div>
+
+<script type="text/javascript">
+
+$(function() {
+    $('#text-input').on('input', function() {
+
+		var canvas = document.getElementById('myCanvas');
+		var context = canvas.getContext('2d');
+				
+		var txt = $(this).val();
+		
+		var txtWidth = context.measureText(txt).width;
+		
+		var canvasWidth = txtWidth + 36;
+		
+		canvas.width = canvasWidth;
+		
+		var rectWidth = txtWidth + 32;
+		var x = canvas.width / 2;
+		var y = canvas.height / 2;
+		
+		//Make the Rectangle
+		context.fillStyle='#FFF';
+		context.fillRect(2, 2, rectWidth, 26);
+		
+		//add faux bevels
+		var bottomGradient = context.createLinearGradient(0,22,0,28);
+		bottomGradient.addColorStop(0,"#fcfcfc");
+		bottomGradient.addColorStop(1,"#aeadad");
+		
+		context.fillStyle=bottomGradient;
+		context.beginPath();
+		context.moveTo(2,28);
+		context.lineTo(8,22);
+		context.lineTo(rectWidth-4,22);
+		context.lineTo(rectWidth+2, 28);
+		context.closePath();
+		context.fill();
+		
+		var sideGradient = context.createLinearGradient(rectWidth-4,0,rectWidth+2,0);
+		sideGradient.addColorStop(0,"#fcfcfc");
+		sideGradient.addColorStop(1,"#aeadad");
+		
+		context.fillStyle=sideGradient;
+		context.beginPath();
+		context.moveTo(rectWidth+2, 28);
+		context.lineTo(rectWidth-4,22);
+		context.lineTo(rectWidth-4,8);
+		context.lineTo(rectWidth+2,2);
+		context.closePath();
+		context.fill();
+		
+		//add Text
+		context.font = "bold 11px arial black";
+		context.fillStyle = "#005596";
+		context.textAlign="center";
+		context.textBaseline="middle";
+		
+		
+		context.fillText(txt,x,y);
+	})
+});
+
+$('#createButton').click(function() {
+	var canvas=document.getElementById("myCanvas");
+	var data=canvas.toDataURL("image/png");
+	document.write("<img src='"+data+"' alt='from canvas'/>");
+ });
+
+</script>
+
+</body>
+</html>
